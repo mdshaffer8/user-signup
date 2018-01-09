@@ -10,7 +10,7 @@ app.config['DEBUG'] = True
 def display_signup_form():
     return render_template('signup_form.html')
 
-def is_not_blank(x):
+def is_blank(x):
     if x:
         return False
     else:
@@ -32,7 +32,7 @@ def user_errors():
 
 
     # password
-    if is_not_blank(password):
+    if is_blank(password):
         password_error = "Field cannot be blank"
         password = ''
     else:
@@ -51,7 +51,7 @@ def user_errors():
                     verify_password = ''
 
     # username
-    if is_not_blank(username):
+    if is_blank(username):
         username_error = "Field cannot be blank"
         username = ''
     else:
@@ -65,18 +65,19 @@ def user_errors():
                 username = ''
 
     # email
-    email_length = len(email)
-    if email_length > 20 or email_length < 3:
-        email_error = "Email address must be between 3 and 20 characters"
-        email = ''
-    else:
-        if "@" not in email:
-            email_error = "Email address must contain the '@' symbol"
+    if not is_blank(email):
+        email_length = len(email)
+        if email_length > 20 or email_length < 3:
+            email_error = "Email address must be between 3 and 20 characters"
             email = ''
         else:
-            if "." not in email:
-                email_error = "Email address must contain a period"
+            if "@" not in email:
+                email_error = "Email address must contain the '@' symbol"
                 email = ''
+            else:
+                if "." not in email:
+                    email_error = "Email address must contain a period"
+                    email = ''
 
     if not username_error and not password_error and not verify_password_error and not email_error:
         username = username
