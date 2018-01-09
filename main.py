@@ -10,7 +10,7 @@ app.config['DEBUG'] = True
 def display_signup_form():
     return render_template('signup_form.html')
 
-def is_blank(x):
+def is_not_blank(x):
     if x:
         return False
     else:
@@ -30,15 +30,9 @@ def user_errors():
     verify_password_error = ''
     email_error = ''
 
-    # password verification
-    if verify_password != password:
-        verify_password_error = "Passwords must match"
-        verify_password = ''
-        password_error = 'Passwords must match'
-        password = ''
 
     # password
-    if is_blank(password):
+    if is_not_blank(password):
         password_error = "Field cannot be blank"
         password = ''
     else:
@@ -50,9 +44,14 @@ def user_errors():
             if " " in password:
                 password_error = "Password cannot contain spaces"
                 password = ''
+            else:
+                if verify_password != password:
+                    verify_password_error = "Passwords must match"
+                    password = ''
+                    verify_password = ''
 
     # username
-    if is_blank(username):
+    if is_not_blank(username):
         username_error = "Field cannot be blank"
         username = ''
     else:
